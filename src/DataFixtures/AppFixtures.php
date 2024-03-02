@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\PokemonCard;
-use App\Entity\Types;
+use App\Entity\TypesCard;
 use Doctrine\DBAL\Connection;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -39,19 +39,20 @@ class AppFixtures extends Fixture
          ##$this->truncate();
 
         // Création des auteurs.
-    $listTypes = [];
-    for ($i = 0; $i < 10; $i++) {
+        $listTypes = [];
+        for ($i = 0; $i < 10; $i++) {
         // Création de l'auteur lui-même.
-        $type = new Types();
-        $type->setTypeName("type" . $i);
+        $type = new TypesCard();
+        $type->setNameType("type" . $i);
+        $type->setColorType("color". $i);
         
         $manager->persist($type);
         // On sauvegarde l'auteur créé dans un tableau.
         $listTypes[] = $type;
-    }
+        }
        // Création de card 
         for ($i = 0; $i < 151; $i++) {
-        $card = new PokemonCard;
+        $card = new PokemonCarD;
         $card->setName('Card ' . $i);
         $card->setDescription('Voici la carte numero : ' . $i);
         $card->setNumber($i);
@@ -66,6 +67,8 @@ class AppFixtures extends Fixture
         $card->setRarity(100);
         $card->setAttack1(100);
         $card->setAttack2(100);
+        $card->addTypesCard($listTypes[array_rand($listTypes)]);
+        
 
 
       

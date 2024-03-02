@@ -15,7 +15,7 @@ class PokemonCardController extends AbstractController
     public function getPokeCardList(PokemonCardRepository $PokemonCardRepository, SerializerInterface $serializer): JsonResponse
     {
         $pokemonCardList = $PokemonCardRepository->findAll();
-        $jsonPokemonCardList = $serializer->serialize($pokemonCardList, 'json');
+        $jsonPokemonCardList = $serializer->serialize($pokemonCardList, 'json',['groups' => 'getCard']);
         return new JsonResponse($jsonPokemonCardList, Response::HTTP_OK, [], true);
     }
     
@@ -24,7 +24,7 @@ class PokemonCardController extends AbstractController
 
         $pokemonCard = $PokemonCardRepository->find($id);
         if ($pokemonCard) {
-            $jsonPokemonCard = $serializer->serialize($pokemonCard, 'json');
+            $jsonPokemonCard = $serializer->serialize($pokemonCard, 'json',['groups' => 'getCard']);
             return new JsonResponse($jsonPokemonCard, Response::HTTP_OK, [], true);
         }
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);

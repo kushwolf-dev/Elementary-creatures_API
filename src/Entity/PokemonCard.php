@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PokemonCardRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PokemonCardRepository::class)]
@@ -13,54 +14,58 @@ class PokemonCard
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["getCard"])]
+    
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $description = null;
 
-    #[ORM\Column]
+    #[ORM\Column]#[Groups(["getCard"])]
     private ?int $number = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $hp = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Ability = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Weakness = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Resistance = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Evolve_1 = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Evolve_2 = null;
 
-    #[ORM\Column(length: 500)]
+    #[ORM\Column(length: 500)]#[Groups(["getCard"])]
     private ?string $Background_image = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Rarity = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Attack_1 = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255)]#[Groups(["getCard"])]
     private ?string $Attack_2 = null;
 
-    #[ORM\ManyToMany(targetEntity: Types::class, mappedBy: 'PokemonCards')]
-    private Collection $types;
+    #[ORM\ManyToMany(targetEntity: TypesCard::class, mappedBy: 'PokemonCards')]#[Groups(["getCard"])]
+    private Collection $typesCards;
 
     public function __construct()
     {
-        $this->types = new ArrayCollection();
+        $this->typesCards = new ArrayCollection();
     }
+
+  
 
     public function getId(): ?int
     {
@@ -225,27 +230,27 @@ class PokemonCard
     }
 
     /**
-     * @return Collection<int, Types>
+     * @return Collection<int, TypesCard>
      */
-    public function getTypes(): Collection
+    public function getTypesCards(): Collection
     {
-        return $this->types;
+        return $this->typesCards;
     }
 
-    public function addType(Types $type): static
+    public function addTypesCard(TypesCard $typesCard): static
     {
-        if (!$this->types->contains($type)) {
-            $this->types->add($type);
-            $type->addPokemonCard($this);
+        if (!$this->typesCards->contains($typesCard)) {
+            $this->typesCards->add($typesCard);
+            $typesCard->addPokemonCard($this);
         }
 
         return $this;
     }
 
-    public function removeType(Types $type): static
+    public function removeTypesCard(TypesCard $typesCard): static
     {
-        if ($this->types->removeElement($type)) {
-            $type->removePokemonCard($this);
+        if ($this->typesCards->removeElement($typesCard)) {
+            $typesCard->removePokemonCard($this);
         }
 
         return $this;
