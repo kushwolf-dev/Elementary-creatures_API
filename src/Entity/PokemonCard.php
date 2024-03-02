@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PokemonCardRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PokemonCardRepository::class)]
@@ -19,9 +21,6 @@ class PokemonCard
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $type = null;
-
     #[ORM\Column]
     private ?int $number = null;
 
@@ -36,9 +35,6 @@ class PokemonCard
 
     #[ORM\Column(length: 255)]
     private ?string $Resistance = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $Type_2 = null;
 
     #[ORM\Column(length: 255)]
     private ?string $Evolve_1 = null;
@@ -57,6 +53,14 @@ class PokemonCard
 
     #[ORM\Column(length: 255)]
     private ?string $Attack_2 = null;
+
+    #[ORM\ManyToMany(targetEntity: Types::class, mappedBy: 'PokemonCards')]
+    private Collection $types;
+
+    public function __construct()
+    {
+        $this->types = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -83,18 +87,6 @@ class PokemonCard
     public function setDescription(string $description): static
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): static
-    {
-        $this->type = $type;
 
         return $this;
     }
@@ -159,17 +151,6 @@ class PokemonCard
         return $this;
     }
 
-    public function getType2(): ?string
-    {
-        return $this->Type_2;
-    }
-
-    public function setType2(string $Type_2): static
-    {
-        $this->Type_2 = $Type_2;
-
-        return $this;
-    }
 
     public function getEvolve1(): ?string
     {
@@ -239,6 +220,33 @@ class PokemonCard
     public function setAttack2(string $Attack_2): static
     {
         $this->Attack_2 = $Attack_2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Types>
+     */
+    public function getTypes(): Collection
+    {
+        return $this->types;
+    }
+
+    public function addType(Types $type): static
+    {
+        if (!$this->types->contains($type)) {
+            $this->types->add($type);
+            $type->addPokemonCard($this);
+        }
+
+        return $this;
+    }
+
+    public function removeType(Types $type): static
+    {
+        if ($this->types->removeElement($type)) {
+            $type->removePokemonCard($this);
+        }
 
         return $this;
     }
