@@ -49,6 +49,15 @@ class PokemonCard
     #[ORM\Column(length: 500)]
     private ?string $Background_image = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $Rarity = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Attack_1 = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Attack_2 = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -194,6 +203,42 @@ class PokemonCard
     public function setBackgroundImage(string $Background_image): static
     {
         $this->Background_image = $Background_image;
+
+        return $this;
+    }
+
+    public function getRarity(): ?string
+    {
+        return $this->Rarity;
+    }
+
+    public function setRarity(string $Rarity): static
+    {
+        $this->Rarity = $Rarity;
+
+        return $this;
+    }
+
+    public function getAttack1(): ?string
+    {
+        return $this->Attack_1;
+    }
+
+    public function setAttack1(string $Attack_1): static
+    {
+        $this->Attack_1 = $Attack_1;
+
+        return $this;
+    }
+
+    public function getAttack2(): ?string
+    {
+        return $this->Attack_2;
+    }
+
+    public function setAttack2(string $Attack_2): static
+    {
+        $this->Attack_2 = $Attack_2;
 
         return $this;
     }
