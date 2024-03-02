@@ -18,9 +18,10 @@ class PokemonCardController extends AbstractController
         $jsonPokemonCardList = $serializer->serialize($pokemonCardList, 'json');
         return new JsonResponse($jsonPokemonCardList, Response::HTTP_OK, [], true);
     }
-    
+
     #[Route('/api/pokemoncards/{id}', name: 'detailPokemonCard', methods: ['GET'])]
-    public function getDetailPokeCard(int $id, SerializerInterface $serializer, PokemonCardRepository $PokemonCardRepository): JsonResponse {
+    public function getDetailPokeCard(int $id, SerializerInterface $serializer, PokemonCardRepository $PokemonCardRepository): JsonResponse
+    {
 
         $pokemonCard = $PokemonCardRepository->find($id);
         if ($pokemonCard) {
@@ -28,4 +29,5 @@ class PokemonCardController extends AbstractController
             return new JsonResponse($jsonPokemonCard, Response::HTTP_OK, [], true);
         }
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
-   }}
+    }
+}
