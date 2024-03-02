@@ -27,6 +27,8 @@ class AppFixtures extends Fixture
 
         $this->connection->executeQuery('TRUNCATE TABLE pokemon_card');
 
+        $this->connection->executeQuery('TRUNCATE TABLE types');
+
         $this->connection->executeQuery('SET foreign_key_checks = 1');
     }
 
@@ -34,8 +36,19 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
        
-        ## $this->truncate();
+         ##$this->truncate();
 
+        // Création des auteurs.
+    $listTypes = [];
+    for ($i = 0; $i < 10; $i++) {
+        // Création de l'auteur lui-même.
+        $type = new Types();
+        $type->setTypeName("type" . $i);
+        
+        $manager->persist($type);
+        // On sauvegarde l'auteur créé dans un tableau.
+        $listTypes[] = $type;
+    }
        // Création de card 
         for ($i = 0; $i < 151; $i++) {
         $card = new PokemonCard;
@@ -53,6 +66,7 @@ class AppFixtures extends Fixture
         $card->setRarity(100);
         $card->setAttack1(100);
         $card->setAttack2(100);
+
 
       
         $manager->persist($card);
