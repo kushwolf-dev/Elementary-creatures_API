@@ -25,6 +25,30 @@ class PokemonCard
     #[ORM\Column]
     private ?int $number = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $hp = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Ability = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Weakness = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Resistance = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Type_2 = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Evolve_1 = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Evolve_2 = null;
+
+    #[ORM\Column(length: 500)]
+    private ?string $Background_image = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +98,102 @@ class PokemonCard
     public function setNumber(int $number): static
     {
         $this->number = $number;
+
+        return $this;
+    }
+
+    public function getHp(): ?string
+    {
+        return $this->hp;
+    }
+
+    public function setHp(string $hp): static
+    {
+        $this->hp = $hp;
+
+        return $this;
+    }
+
+    public function getAbility(): ?string
+    {
+        return $this->Ability;
+    }
+
+    public function setAbility(string $Ability): static
+    {
+        $this->Ability = $Ability;
+
+        return $this;
+    }
+
+    public function getWeakness(): ?string
+    {
+        return $this->Weakness;
+    }
+
+    public function setWeakness(string $Weakness): static
+    {
+        $this->Weakness = $Weakness;
+
+        return $this;
+    }
+
+    public function getResistance(): ?string
+    {
+        return $this->Resistance;
+    }
+
+    public function setResistance(string $Resistance): static
+    {
+        $this->Resistance = $Resistance;
+
+        return $this;
+    }
+
+    public function getType2(): ?string
+    {
+        return $this->Type_2;
+    }
+
+    public function setType2(string $Type_2): static
+    {
+        $this->Type_2 = $Type_2;
+
+        return $this;
+    }
+
+    public function getEvolve1(): ?string
+    {
+        return $this->Evolve_1;
+    }
+
+    public function setEvolve1(string $Evolve_1): static
+    {
+        $this->Evolve_1 = $Evolve_1;
+
+        return $this;
+    }
+
+    public function getEvolve2(): ?string
+    {
+        return $this->Evolve_2;
+    }
+
+    public function setEvolve2(string $Evolve_2): static
+    {
+        $this->Evolve_2 = $Evolve_2;
+
+        return $this;
+    }
+
+    public function getBackgroundImage(): ?string
+    {
+        return $this->Background_image;
+    }
+
+    public function setBackgroundImage(string $Background_image): static
+    {
+        $this->Background_image = $Background_image;
 
         return $this;
     }
