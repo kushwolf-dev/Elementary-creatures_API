@@ -46,7 +46,7 @@ class PokemonCard
     #[ORM\Column(length: 255)]
     private ?string $Evolve_2 = null;
 
-    #[ORM\Column(length: 500)]
+    #[ORM\Column(length: 5000)]
     private ?string $Background_image = null;
 
     #[ORM\Column(length: 255)]

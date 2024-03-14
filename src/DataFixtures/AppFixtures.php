@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
         $card->setEvolve2(100);
         $card->setResistance(100);
         $card->setType2(100);
-        $card->setBackgroundImage(100);
+        $card->setBackgroundImage(2);
         $card->setAbility(100);
         $card->setBackgroundImage(100);
         $card->setRarity(100);
