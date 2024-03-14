@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,13 +28,20 @@ class PokemonCardController extends AbstractController
  * @param UrlGeneratorInterface $urlGenerator The URL generator service
  * @return JsonResponse The response object
  */
-public function createPokemonCard(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator): JsonResponse 
+public function createPokemonCard(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse 
 {
     // Deserialize the request body into a PokemonCard object
     $pokemonCard = $serializer->deserialize($request->getContent(), PokemonCard::class, 'json');
 
-    // Persist the PokemonCard to the database
-    $em->persist($pokemonCard);
+
+    // On vérifie les erreurs
+    $errors = $validator->validate($pokemonCard);
+
+    if ($errors->count() > 0) {
+        return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST, [], true);
+    }
+
+    $em->persist($pokemonCard );
     $em->flush();
 
     // Serialize the PokemonCard into JSON

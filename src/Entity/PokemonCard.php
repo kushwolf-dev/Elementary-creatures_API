@@ -2,8 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\PokemonCardRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PokemonCardRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PokemonCardRepository::class)]
 class PokemonCard
@@ -13,7 +15,10 @@ class PokemonCard
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Groups(["getPokemonCard"])]
+    #[Assert\NotBlank(message: "Le nom de la carte obligatoire")]
+    #[Assert\Length(min: 1, max: 255, minMessage: "Le nom doit faire au moins {{ limit }} caractères", maxMessage: "Le nom ne peut pas faire plus de {{ limit }} caractères")]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
