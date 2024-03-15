@@ -15,10 +15,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+
 class PokemonCardController extends AbstractController
 {
 
-    #[Route('/api/pokemoncards', name:"createBook", methods: ['POST'])]
+    #[Route('/api/pokemoncards', name:"createPokemonCard", methods: ['POST'])]
     /**
  * Creates a new PokemonCard in the database.
  *
@@ -48,7 +49,7 @@ public function createPokemonCard(Request $request, SerializerInterface $seriali
     $jsonPokemonCard = $serializer->serialize($pokemonCard, 'json', ['groups' => 'getPokemonCard']);
 
     // Generate the location header for the new PokemonCard
-    $location = $urlGenerator->generate('detailPokemonCard', ['id' => $pokemonCard->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+    $location = $urlGenerator->generate('allPokemonCard', ['id' => $pokemonCard->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
     // Return a response with the PokemonCard JSON and a location header
     return new JsonResponse($jsonPokemonCard, Response::HTTP_CREATED, ["Location" => $location], true);
@@ -56,7 +57,7 @@ public function createPokemonCard(Request $request, SerializerInterface $seriali
 
 
    
-    #[Route('/api/pokemoncards', name: 'pokemoncard', methods: ['GET'])]
+    #[Route('/api/pokemoncards', name: 'allPokemonCard', methods: ['GET'])]
     /**
     * Returns a list of all PokemonCards.
     *
@@ -73,6 +74,7 @@ public function getPokeCardList(PokemonCardRepository $PokemonCardRepository, Se
     
 
 
+    #[Route('/api/pokemoncards/{id}', name: 'onePokemonCard', methods: ['GET'])]
     /**
  * Returns a specific PokemonCard based on its ID.
  *
@@ -92,6 +94,7 @@ public function getDetailPokeCard(int $id, PokemonCardRepository $PokemonCardRep
 }
     
 
+    #[Route('/api/pokemoncards/{id}', name: 'updatePokemonCard', methods: ['PATCH'])]
     /**
  * Updates a PokemonCard in the database.
  *
@@ -101,19 +104,30 @@ public function getDetailPokeCard(int $id, PokemonCardRepository $PokemonCardRep
  * @param EntityManagerInterface $em The entity manager service
  * @return JsonResponse The response object
  */
-public function updatePokemonCard(Request $request, SerializerInterface $serializer, PokemonCard $currentPokemonCard, EntityManagerInterface $em): JsonResponse 
+public function updatePokemonCard(ValidatorInterface $validator, Request $request, SerializerInterface $serializer, PokemonCard $currentPokemonCard, EntityManagerInterface $em): JsonResponse 
 {
-    // Get the updated PokemonCard from the request body
-    $updatedPokemonCard = $serializer->deserialize($request->getContent(), PokemonCard::class, 'json');
-
-    // Update the PokemonCard
+    // Deserializing the request
+    $updatedPokemonCard = $serializer->deserialize(
+        $request->getContent(),
+        PokemonCard::class,
+        'json',
+        [AbstractNormalizer::OBJECT_TO_POPULATE => $currentPokemonCard]
+    );
+    // Validating the request
+    $errors = $validator->validate($updatedPokemonCard);
+    if ($errors->count() > 0) {
+        return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST, [], true);
+    }
+    // Saving the request
     $em->persist($updatedPokemonCard);
     $em->flush();
+    // Serializing the request
+    $jsonPokemonCardList = $serializer->serialize($updatedPokemonCard, 'json');
+    return new JsonResponse($jsonPokemonCardList, Response::HTTP_OK, [], true);
 
-    // Return a no content response
-    return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT);
 }
 
+    #[Route('/api/pokemoncards/{id}', name: 'deletePokemonCard', methods: ['DEL'])]
     /**
  * Deletes a PokemonCard from the database.
  *
